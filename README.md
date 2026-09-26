@@ -11,7 +11,7 @@ python -m pip install -r requirements.txt
 python sample.py
 ```
 
-Open <http://127.0.0.1:5001> and search for a city. Temperatures are shown in Celsius and wind speed in kilometers per hour.
+Open <http://127.0.0.1:5000> and search for a city. Temperatures are shown in Celsius and wind speed in kilometers per hour.
 
 ## Tests
 
