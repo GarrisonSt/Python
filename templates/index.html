@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#edf4f0">
+  <title>Weather Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="wordmark" href="{{ url_for('index') }}" aria-label="Weather Desk home">
+        <span class="wordmark-icon" aria-hidden="true"><i data-lucide="cloud-sun"></i></span>
+        <span>Weather<span class="wordmark-light">Desk</span></span>
+      </a>
+      <span class="header-note">CURRENT CONDITIONS <span class="live-dot" aria-hidden="true"></span></span>
+    </header>
+
+    <main>
+      <section class="search-section" aria-labelledby="page-title">
+        <p class="eyebrow">YOUR LOCAL FORECAST</p>
+        <h1 id="page-title">Weather, <span>right now.</span></h1>
+        <form class="search-form" action="{{ url_for('index') }}" method="get">
+          <label class="visually-hidden" for="city">City name</label>
+          <i class="search-icon" data-lucide="map-pin" aria-hidden="true"></i>
+          <input id="city" name="city" type="search" maxlength="100" placeholder="Enter a city" value="{{ city }}" autocomplete="off" required>
+          <button type="submit" aria-label="Search city" title="Search city"><i data-lucide="arrow-right" aria-hidden="true"></i></button>
+        </form>
+        {% if error %}
+          <p class="feedback error-message" role="alert">{{ error }}</p>
+        {% endif %}
+      </section>
+
+      {% if weather %}
+        <section class="weather-report" aria-labelledby="weather-city">
+          <div class="report-heading">
+            <div>
+              <p class="eyebrow">NOW IN</p>
+              <h2 id="weather-city">{{ weather.city }}{% if weather.region %}<span class="location-detail">{{ weather.region }}{% if weather.country %}, {{ weather.country }}{% endif %}</span>{% elif weather.country %}<span class="location-detail">{{ weather.country }}</span>{% endif %}</h2>
+            </div>
+            <span class="report-mark" aria-hidden="true"><i data-lucide="radio-tower"></i></span>
+          </div>
+
+          <div class="conditions">
+            <div class="temperature-block">
+              <p class="eyebrow">AIR TEMPERATURE</p>
+              <p class="temperature">{{ weather.temperature|round|int }}<span>°C</span></p>
+              <p class="condition">{{ weather.description }}</p>
+            </div>
+            <div class="condition-art" aria-hidden="true">
+              <i data-lucide="{{ weather.icon }}"></i>
+            </div>
+          </div>
+
+          <dl class="details-grid">
+            <div class="detail-item">
+              <dt><i data-lucide="thermometer" aria-hidden="true"></i> FEELS LIKE</dt>
+              <dd>{{ weather.feels_like|round|int }}<span>°C</span></dd>
+            </div>
+            <div class="detail-item">
+              <dt><i data-lucide="droplets" aria-hidden="true"></i> HUMIDITY</dt>
+              <dd>{{ weather.humidity|round|int }}<span>%</span></dd>
+            </div>
+            <div class="detail-item">
+              <dt><i data-lucide="wind" aria-hidden="true"></i> WIND</dt>
+              <dd>{{ weather.wind_speed|round|int }}<span>km/h</span></dd>
+            </div>
+          </dl>
+          <p class="source-note">Weather data by Open-Meteo</p>
+        </section>
+      {% elif not error %}
+        <section class="empty-state" aria-label="Weather search">
+          <div class="empty-icon" aria-hidden="true"><i data-lucide="cloud-sun"></i></div>
+          <div>
+            <p class="empty-title">A little sky check.</p>
+            <p class="empty-copy">Search a city to see its current conditions.</p>
+          </div>
+          <span class="empty-coordinate" aria-hidden="true">° / °</span>
+        </section>
+      {% endif %}
+    </main>
+
+    <footer class="site-footer">
+      <span>OPEN-METEO WEATHER</span>
+      <span>BUILT FOR THE OUTSIDE</span>
+    </footer>
+  </div>
+  <script src="https://unpkg.com/lucide@0.468.0"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>
